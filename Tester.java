@@ -1,6 +1,9 @@
+import java.util.Comparator;
+
 import Stack.Stack;
 import dynamic_array.DynamicArray;
 import linked_list.LinkedList;
+import priority_queue.PriorityQueue;
 import queue.Queue;
 /**
  * Tester
@@ -8,12 +11,12 @@ import queue.Queue;
 public class Tester {
 
     public static void main(String[] args) {
-        Queue<Integer> q = new Queue<>();
-        for (int i = 0; i < 10; i++)
-            q.enq(i);
-        System.out.println(q);
-        for (int i = 0; i < 10; i++)
-             System.out.println(q.deq());
-        System.out.println(q);
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> Integer.compare(a, b));
+        for (int i = 4; i >= 0; i--)
+            pq.enq(i);
+        System.out.println(pq);
+        for (int i = 0; i < 3; i++)
+            System.out.println(pq.deq());
+        System.out.println(pq);
     }
 }

@@ -36,18 +36,12 @@ public class DynamicArray<E> {
     }
 
     @Override
-    public String toString() {
-        int iMax = size - 1;
-        if (iMax == -1)
-            return "[]";
-
+    public String toString() {        
         StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (int i = 0; ; i++) {
-            sb.append(elements[i]);
-            if (i == iMax)
-                return sb.append(']').toString();
-            sb.append(", ");
-        }
+        sb.append("[").append(" ");
+        for (int i = 0; i < size; i++)
+            sb.append(elements[i]).append(" ");
+        sb.append("]");
+        return sb.toString();
     }
 }
