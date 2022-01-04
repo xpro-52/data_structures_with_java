@@ -1,6 +1,6 @@
 import java.util.Comparator;
 
-import Stack.Stack;
+import stack.Stack;
 import dynamic_array.DynamicArray;
 import linked_list.LinkedList;
 import priority_queue.PriorityQueue;
