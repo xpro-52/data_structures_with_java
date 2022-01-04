@@ -79,7 +79,7 @@ public class LinkedList<E> {
         int i = 0;
         Node<E> node = this.head;
         for (; i < index; node = node.next(), i++);
-        E elem = node.elem();
+        final E elem = node.elem();
         Node<E> prev = node.prev();
         Node<E> next = node.next();
 
@@ -102,7 +102,7 @@ public class LinkedList<E> {
         if (this.tail == null)
             throw new NoSuchElementException();
 
-        E elem = this.tail.elem();
+        final E elem = this.tail.elem();
         Node<E> prev = this.tail.prev();
 
         this.tail = prev;
@@ -119,7 +119,7 @@ public class LinkedList<E> {
         if (this.head == null)
             throw new NoSuchElementException();
 
-        E elem = this.head.elem();
+        final E elem = this.head.elem();
         Node<E> next = this.head.next();
 
         this.head = next;

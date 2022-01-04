@@ -26,15 +26,14 @@ public class PriorityQueue<E> {
             elements = Arrays.copyOf(elements, cap() * TIMES);
         
         elements[size] = e;
-        siftUp();
+        siftUp(size, comparator, elements);
         size++;
     }
 
-    private void siftUp() {
-        int k = size;
+    private static <T> void siftUp(int k, Comparator<? super T> comparator, Object[] elements) {
         while (k > 0) {
             int parent = (k - 1) / 2;
-            if (comparator.compare((E) elements[k], (E) elements[parent]) < 0) {
+            if (comparator.compare((T) elements[k], (T) elements[parent]) < 0) {
                 swap(elements, k, parent);
                 k = parent;
             } else {
@@ -52,22 +51,20 @@ public class PriorityQueue<E> {
             elements[last] = null;
             if (last > 0) {
                 elements[0] = le;
-                siftDown();
+                siftDown(size, comparator, elements);
             }
         }
         return fe;
     }
 
-    private void siftDown() {
+    private static <T> void siftDown(int size, Comparator<? super T> comparator, Object[] elements) {
         int k = 0;
-        int half = size / 2;
-        while (k < half) {
+        while (k < size / 2) {
             int child = 2 * k + 1;
             int right = child + 1;
-            if (right < size && comparator.compare((E) elements[child], (E) elements[right]) >= 0)
+            if (right < size && comparator.compare((T) elements[child], (T) elements[right]) >= 0)
                 child = right;
-
-            if (comparator.compare((E) elements[k], (E) elements[child]) > 0) {
+            if (comparator.compare((T) elements[k], (T) elements[child]) > 0) {
                 swap(elements, k, child);
                 k = child;
             } else {

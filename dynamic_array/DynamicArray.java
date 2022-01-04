@@ -28,7 +28,7 @@ public class DynamicArray<E> {
 
     public E remove(int index) {
         @SuppressWarnings("unchecked") E removed_elem = (E) elements[index];
-        int last_i = size - 1;
+        final int last_i = size - 1;
         if (last_i > index)
             System.arraycopy(elements, index + 1, elements, index, last_i - index);
         elements[size = last_i] = null;
