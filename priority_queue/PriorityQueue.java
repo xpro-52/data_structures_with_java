@@ -59,7 +59,8 @@ public class PriorityQueue<E> {
 
     private static <T> void siftDown(int size, Comparator<? super T> comparator, Object[] elements) {
         int k = 0;
-        while (k < size / 2) {
+        int k_lim = size / 2;
+        while (k < k_lim) {
             int child = 2 * k + 1;
             int right = child + 1;
             if (right < size && comparator.compare((T) elements[child], (T) elements[right]) >= 0)
