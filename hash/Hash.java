@@ -16,7 +16,6 @@ public class Hash<E> {
         for (E a : array) {
             int key = hash(a, capacity);
             while (elements[key] != null && !elements[key].equals(a)) {  
-                // 格納場所にすでにありかつそれが格納されているものと等しくない場合
                 key = (key + 1) % capacity;
             }
             if (elements[key] == null) {

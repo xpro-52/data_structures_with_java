@@ -48,7 +48,7 @@ public class LinkedList<E> {
         new_node.setPrev(old_tail);
         this.tail = new_node;
 
-        if (old_tail == null) { // 要素が一つならhead=tailとする
+        if (old_tail == null) {
             this.head = new_node;
         } else {
             old_tail.setNext(new_node);
