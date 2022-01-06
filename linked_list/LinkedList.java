@@ -2,15 +2,7 @@ package linked_list;
 
 import java.util.NoSuchElementException;
 
-/**
- * 連結リスト
- */
 public class LinkedList<E> {
-    /**
-     * 連結リストのノード
-     * prev: 前のノード
-     * next: 次のノード
-     */
     static class Node<E> {
         Node<E> prev;
         Node<E> next;
@@ -46,16 +38,21 @@ public class LinkedList<E> {
         size = 0;
     }
 
+    public int size() {
+        return size;
+    }
+
     public void addLast(E e) {
         Node<E> new_node = new Node<>(e);
         Node<E> old_tail = this.tail;
         new_node.setPrev(old_tail);
         this.tail = new_node;
 
-        if (old_tail == null)  // 要素が一つならhead=tailとする
+        if (old_tail == null) { // 要素が一つならhead=tailとする
             this.head = new_node;
-        else
+        } else {
             old_tail.setNext(new_node);
+        }
         size++;
     }
 
@@ -65,17 +62,25 @@ public class LinkedList<E> {
         new_node.setNext(old_head);
         this.head = new_node;
 
-        if (old_head == null)
+        if (old_head == null) {
             this.tail = new_node;
-        else
+        } else {
             old_head.setPrev(new_node);
+        }
     }
 
     public void add(E e) {
         addLast(e);
     }
 
+    private void rangeCheck(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
     public E remove(int index) {
+        rangeCheck(index);
         int i = 0;
         Node<E> node = this.head;
         for (; i < index; node = node.next(), i++);
@@ -106,44 +111,46 @@ public class LinkedList<E> {
         Node<E> prev = this.tail.prev();
 
         this.tail = prev;
-        if (prev == null)
+        if (prev == null) {
             this.head = null;
-        else
+        }
+        else {
             prev.setNext(null);
-        
+        }
         size--;
         return elem;
     }
 
     public E removeFirst() {
-        if (this.head == null)
+        if (this.head == null) {
             throw new NoSuchElementException();
+        }
 
         final E elem = this.head.elem();
         Node<E> next = this.head.next();
 
         this.head = next;
-        if (next == null)
+        if (next == null) {
             this.tail = null;
-        else
+        } else {
             next.setPrev(null);
-
+        }
         size--;
         return elem;
     }
 
     @Override
     public String toString() {
-        if (size == 0)
+        if (size == 0) {
             return "[]";
-        
-        StringBuilder sb = new StringBuilder();
-        sb.append("[");
-        for (Node<E> node = this.head; ; node = node.next()) {
-            sb.append(node.toString());
-            if (node.next() == null)
-                return sb.append("]").toString();
-            sb.append(", ");
         }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("[").append(" ");
+        for (Node<E> node = this.head; node != null ; node = node.next()) {
+            sb.append(node.toString()).append(" ");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }

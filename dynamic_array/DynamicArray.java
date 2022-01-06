@@ -19,28 +19,50 @@ public class DynamicArray<E> {
     }
 
     private int cap() { return elements.length; }
+    public int __cap() { return elements.length; }  // debug
+
+
+    private void rangeCheck(int index) {
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException();
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public E get(int index) {
+        rangeCheck(index);
+        return (E) elements[index];
+    }
 
     public void add(E e) {
-        if (size >= cap())
+        if (size >= cap()) {
             elements = Arrays.copyOf(elements, cap() * TIMES);
+        }
         elements[size++] = e;
     }
 
     public E remove(int index) {
+        rangeCheck(index);
         @SuppressWarnings("unchecked") E removed_elem = (E) elements[index];
         final int last_i = size - 1;
-        if (last_i > index)
+        if (last_i > index) {
             System.arraycopy(elements, index + 1, elements, index, last_i - index);
+        }
         elements[size = last_i] = null;
         return removed_elem;
+    }
+
+    public int size() {
+        return size;
     }
 
     @Override
     public String toString() {        
         StringBuilder sb = new StringBuilder();
         sb.append("[").append(" ");
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++) {
             sb.append(elements[i]).append(" ");
+        }
         sb.append("]");
         return sb.toString();
     }

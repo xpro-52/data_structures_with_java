@@ -22,8 +22,9 @@ public class PriorityQueue<E> {
     }
 
     public void enq(E e) {
-        if (size >= cap())
+        if (size >= cap()) {
             elements = Arrays.copyOf(elements, cap() * TIMES);
+        }
         
         elements[size] = e;
         siftUp(size, comparator, elements);
@@ -63,8 +64,9 @@ public class PriorityQueue<E> {
         while (k < k_lim) {
             int child = 2 * k + 1;
             int right = child + 1;
-            if (right < size && comparator.compare((T) elements[child], (T) elements[right]) >= 0)
+            if (right < size && comparator.compare((T) elements[child], (T) elements[right]) >= 0) {
                 child = right;
+            }
             if (comparator.compare((T) elements[k], (T) elements[child]) > 0) {
                 swap(elements, k, child);
                 k = child;
@@ -84,8 +86,9 @@ public class PriorityQueue<E> {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("[").append(" ");
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < size; i++) {
             sb.append(elements[i]).append(" ");
+        }
         sb.append("]");
         return sb.toString();
     }
