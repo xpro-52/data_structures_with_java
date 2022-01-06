@@ -14,14 +14,6 @@ public class LinkedList<E> {
             elem = e;
         }
 
-        void setPrev(Node<E> prev) { this.prev = prev; }
-        void setNext(Node<E> next) { this.next = next; }
-        void setElem(E elem) { this.elem = elem; }
-
-        Node<E> prev() { return prev; }
-        Node<E> next() { return next; }
-        E       elem() { return elem; }
-
         @Override
         public String toString() {
             return elem.toString();
@@ -45,13 +37,13 @@ public class LinkedList<E> {
     public void addLast(E e) {
         Node<E> new_node = new Node<>(e);
         Node<E> old_tail = this.tail;
-        new_node.setPrev(old_tail);
+        new_node.prev = old_tail;
         this.tail = new_node;
 
         if (old_tail == null) {
             this.head = new_node;
         } else {
-            old_tail.setNext(new_node);
+            old_tail.next = new_node;
         }
         size++;
     }
@@ -59,13 +51,13 @@ public class LinkedList<E> {
     public void addFirst(E e) {
         Node<E> new_node = new Node<>(e);
         Node<E> old_head = this.head;
-        new_node.setNext(old_head);
+        new_node.next = old_head;
         this.head = new_node;
 
         if (old_head == null) {
             this.tail = new_node;
         } else {
-            old_head.setPrev(new_node);
+            old_head.prev = new_node;
         }
     }
 
@@ -83,21 +75,21 @@ public class LinkedList<E> {
         rangeCheck(index);
         int i = 0;
         Node<E> node = this.head;
-        for (; i < index; node = node.next(), i++);
-        final E elem = node.elem();
-        Node<E> prev = node.prev();
-        Node<E> next = node.next();
+        for (; i < index; node = node.next, i++);
+        final E elem = node.elem;
+        Node<E> prev = node.prev;
+        Node<E> next = node.next;
 
         if (prev == null) {
             this.head = next;
         } else {
-            prev.setNext(next);
+            prev.next = next;
         }
 
         if (next == null) {
             this.tail = prev;
         } else {
-            next.setPrev(prev);
+            next.prev = prev;
         }
         node = null;
         return elem;
@@ -107,15 +99,15 @@ public class LinkedList<E> {
         if (this.tail == null)
             throw new NoSuchElementException();
 
-        final E elem = this.tail.elem();
-        Node<E> prev = this.tail.prev();
+        final E elem = this.tail.elem;
+        Node<E> prev = this.tail.prev;
 
         this.tail = prev;
         if (prev == null) {
             this.head = null;
         }
         else {
-            prev.setNext(null);
+            prev.next = null;
         }
         size--;
         return elem;
@@ -126,14 +118,14 @@ public class LinkedList<E> {
             throw new NoSuchElementException();
         }
 
-        final E elem = this.head.elem();
-        Node<E> next = this.head.next();
+        final E elem = this.head.elem;
+        Node<E> next = this.head.next;
 
         this.head = next;
         if (next == null) {
             this.tail = null;
         } else {
-            next.setPrev(null);
+            next.prev = null;
         }
         size--;
         return elem;
@@ -147,7 +139,7 @@ public class LinkedList<E> {
 
         StringBuilder sb = new StringBuilder();
         sb.append("[").append(" ");
-        for (Node<E> node = this.head; node != null ; node = node.next()) {
+        for (Node<E> node = this.head; node != null ; node = node.next) {
             sb.append(node.toString()).append(" ");
         }
         sb.append("]");
