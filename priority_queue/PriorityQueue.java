@@ -21,6 +21,10 @@ public class PriorityQueue<E> {
         return elements.length;
     }
 
+    public int size() {
+        return size;
+    }
+
     public void enq(E e) {
         if (size >= cap()) {
             elements = Arrays.copyOf(elements, cap() * TIMES);

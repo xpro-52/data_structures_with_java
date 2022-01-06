@@ -7,12 +7,10 @@ import org.junit.Test;
 import dynamic_array.DynamicArray;
 import linked_list.LinkedList;
 import priority_queue.PriorityQueue;
-import stack.Stack;
-import queue.Queue;
 import hash.Hash;
 
 /**
- * Tester
+ * Simple test
  */
 public class Tester{
     @Test
@@ -60,5 +58,20 @@ public class Tester{
         assertEquals(0, (int) ll.removeFirst());
         assertEquals(10, (int) ll.removeLast());
         assertEquals("[ 1 2 3 4 5 6 7 8 9 ]", ll.toString());
+    }
+
+    @Test
+    public void testPriorityQueue() {
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> Integer.compare(a, b));
+        for (int i = 10; i >= 0; i--) {
+            pq.enq(i);
+        }
+
+        System.out.println(pq);
+        assertEquals(11, pq.size());
+
+        for (int i = 0; i < 11; i++) {
+            assertEquals(i, (int) pq.deq());
+        }
     }
 }
