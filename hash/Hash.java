@@ -69,10 +69,14 @@ public class Hash<E> {
 
     @Override
     public String toString() {
-        return Arrays.toString(
-            Arrays.stream(elements)
-                .filter(e -> e != null)
-                .toArray()
-        );
+        StringBuilder sb = new StringBuilder();
+        sb.append("[").append(" ");
+        for (Object e : elements) {
+            if (e != null) {
+                sb.append(e.toString()).append(" ");
+            }
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }
