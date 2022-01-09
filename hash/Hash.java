@@ -1,7 +1,5 @@
 package hash;
 
-import java.util.Arrays;
-
 import dynamic_array.DynamicArray;
 
 public class Hash<E> {
