@@ -1,7 +1,7 @@
 package binary_search_tree;
 
 import java.util.Comparator;
-import java.util.NoSuchElementException;
+import java.util.StringJoiner;
 
 public class BinarySearchTree<K, V> {
     static class Entry<K, V> {
@@ -19,7 +19,7 @@ public class BinarySearchTree<K, V> {
 
         @Override
         public String toString() {
-            return "{" + key.toString() + ":" + value.toString() + "}";
+            return key.toString() + ": " + value.toString();
         }
     }
 
@@ -69,25 +69,33 @@ public class BinarySearchTree<K, V> {
             }
             iter = cpr < 0 ? iter.left : iter.right;
         }
-        return null;
+        return null;    
     }
 
+    @SuppressWarnings("unchecked")
     public V remove(K key) {
-        Entry<K, V> iter = root;
-        Entry<K, V> parent = null;
-        while (iter != null) {
-            int cpr = comparator.compare(key, iter.key);
-            parent = iter;
-            if (cpr == 0) {
-                V value = iter.value; 
-                iter = deleteEntry(parent);
-                size--;
-                return value;
-            }
-            iter = cpr < 0 ? iter.left : iter.right;
-        }
-        return null;
+        Object[] deleteValue = new Object[1];
+        root = remove(key, root, deleteValue);
+        return (V) deleteValue[0];
     }
+
+    private Entry<K, V> remove(K key, Entry<K, V> entry, Object[] deleteValue) {  // deleteValue is array of length 1 because it is used as pointer of delete value
+        if (entry == null) {
+            return entry;
+        }
+        int cpr = comparator.compare(key, entry.key);
+        if (cpr == 0) {
+            deleteValue[0] = entry.value;
+            entry = deleteEntry(entry);
+            size--;
+        } else if (cpr < 0) {
+            entry.left = remove(key, entry.left, deleteValue);
+        } else {
+            entry.right = remove(key, entry.right, deleteValue);
+        }
+        return entry;
+    }
+
     private Entry<K, V> deleteEntry(Entry<K, V> entry) {
         if (entry.left == null) {
             if (entry.right == null) {
@@ -119,17 +127,16 @@ public class BinarySearchTree<K, V> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[").append(" ");
-        toString(root, sb);
-        return sb.append("]").toString();
+        StringJoiner sj = new StringJoiner(", ");
+        toString(root, sj);
+        return "{" + sj.toString() + "}";
     }
 
-    private void toString(Entry<K, V> entry, StringBuilder sb) {
+    private void toString(Entry<K, V> entry, StringJoiner sj) {
         if (entry != null) {
-            toString(entry.left, sb);
-            sb.append(entry).append(" ");
-            toString(entry.right, sb);
+            toString(entry.left, sj);
+            sj.add(entry.toString());
+            toString(entry.right, sj);
         }
     }
 }

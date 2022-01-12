@@ -3,8 +3,6 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.util.NoSuchElementException;
-
 import org.junit.Test;
 
 import binary_search_tree.BinarySearchTree;
@@ -110,7 +108,7 @@ public class Tester{
         for (Integer i : input) {
             bst.insert(i, i);
         }
-        assertEquals("[ {1:1} {2:2} {3:3} {5:5} {7:7} {9:9} ]", bst.toString());
+        assertEquals("{1: 1, 2: 2, 3: 3, 5: 5, 7: 7, 9: 9}", bst.toString());
         assertEquals(input.length, bst.size());
         for (Integer i : input) {
             assertEquals(i, bst.get(i));
@@ -122,5 +120,6 @@ public class Tester{
             assertEquals(i, bst.remove(i));
         }
         assertEquals(0, bst.size());
+        assertEquals("{}", bst.toString());;
     }
 }

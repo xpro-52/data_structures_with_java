@@ -1,6 +1,7 @@
 package avl_tree;
 
 import java.util.Comparator;
+import java.util.StringJoiner;
 
 public class AVLTree<K, V> {
     static class Entry<K, V> {
@@ -94,9 +95,106 @@ public class AVLTree<K, V> {
         }
     }
 
-    public V remove(K key) {
+    public V get(K key) {
+        return getEntry(key).value;
+    }
 
+    private Entry<K, V> getEntry(K key) {
+        Entry<K, V> iter = root;
+        while (iter != null) {
+            int cpr = comparator.compare(key, iter.key);
+            if (cpr == 0) {
+                return iter;
+            }
+            iter = cpr < 0 ? iter.left : iter.right;
+        }
         return null;
+    }
+
+    public V remove(K key) {
+        Entry<K, V> entry = getEntry(key);
+        System.out.println(entry);
+        if (entry == null) {
+            return null;
+        }
+        V value = entry.value;
+        deleteEntry(entry);
+        return value;
+    }
+
+    private void deleteEntry(Entry<K, V> entry) {
+        Entry<K, V> parent = entry.parent;
+        if (parent != null) {
+            if (entry.left == null) {
+                if (entry.right == null) {
+                    if (parent.left == entry) {
+                        parent.left = null;
+                    } else {
+                        parent.right = null;
+                    }
+                } else {
+                    Entry<K, V> right = entry.right;
+                    right.parent = parent;
+                    if (parent.left == entry) {
+                        parent.left = right;
+                    } else {
+                        parent.right = right;
+                    }
+                }
+            } else {
+                Entry<K, V> left = entry.left;
+                if (entry.right == null) {
+                    left.parent = parent;
+                    if (parent.left == entry) {
+                        parent.left = left;
+                    } else {
+                        parent.right = left;
+                    }
+                } else {
+                    Entry<K, V> right = entry.right;
+                    Entry<K, V> new_right = maxEntry(left);
+                    new_right.right = right;
+                    right.parent = new_right;
+                    left.parent = parent;
+                    if (parent.left == entry) {
+                        parent.left = left;
+                    } else {
+                        parent.right = left;
+                    }
+                    adjustBalance(left);
+                }
+            }
+        } else {
+            if (entry.left == null) {
+                if (entry.right == null) {
+                    root = null;
+                } else {
+                    root = entry.right;
+                }
+            } else {
+                Entry<K, V> left = entry.left;
+                if (entry.right == null) {
+                    root = left;
+                } else {
+                    Entry<K, V> right = entry.right;
+                    Entry<K, V> new_right = maxEntry(left);
+                    new_right.right = right;
+                    right.parent = new_right;
+                    root = left;
+                    left.parent = null;
+                    adjustBalance(left);
+                }
+            }
+        }
+        entry = null;
+        size--;
+    }
+
+    private Entry<K, V> maxEntry(Entry<K, V> root) {
+        while (root.right != null) {
+            root = root.right;
+        }
+        return root;
     }
 
     private int height(Entry<K, V> entry) {
@@ -176,17 +274,16 @@ public class AVLTree<K, V> {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("[").append(" ");
-        toString(root, sb);
-        return sb.append("]").toString();
+        StringJoiner sj = new StringJoiner(", ");
+        toString(root, sj);
+        return "{" + sj.toString() + "}";
     }
 
-    private void toString(Entry<K, V> entry, StringBuilder sb) {
+    private void toString(Entry<K, V> entry, StringJoiner sj) {
         if (entry != null) {
-            toString(entry.left, sb);
-            sb.append(entry).append(" ");
-            toString(entry.right, sb);
+            toString(entry.left, sj);
+            sj.add(entry.toString());
+            toString(entry.right, sj);
         }
     }
 
@@ -199,14 +296,22 @@ public class AVLTree<K, V> {
         // tree.insert(30, 30);
         // tree.insert(22, 22);
         // tree.insert(50, 50);
-        tree.insert(40, 40);
-        tree.insert(30, 30);
-        tree.insert(50, 50);
-        tree.insert(20, 20);
-        tree.insert(35, 35);
-        tree.insert(22, 22);
+        Integer[] input = {40, 30, 50, 20, 35, 22};
+        for (Integer i : input) {
+            tree.insert(i, i);
+        }
         tree.display();
-        System.out.println(tree);
-
+        // for (Integer i : input) {
+        //     System.out.println("delete: " + tree.remove(i));
+        //     tree.display();
+        // }
+        tree.remove(30);
+        tree.display();
+        tree.remove(40);
+        tree.display();
+        tree.remove(50);
+        tree.display();
+        tree.remove(35);
+        tree.display();
     }
 }
