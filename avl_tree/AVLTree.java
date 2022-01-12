@@ -1,7 +1,7 @@
 package avl_tree;
 
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 public class AVLTree<K, V> {
@@ -67,18 +67,28 @@ public class AVLTree<K, V> {
     private void adjustBalance(Entry<K, V> entry) {
         Entry<K, V> iter = entry;
         while (iter != null) {
-            if (Math.abs(height(iter.left) - height(iter.right))> 1) {
-                if (iter.left == null) {
+            if (Math.abs(height(iter.left) - height(iter.right)) > 1) {
+                if (iter.right == null) {
+                    if (iter.left.right == null) {
+                        rotateRight(iter);
+                    } else {
+                        rotateLeftAndRight(iter.left);
+                    }
+                } else if (iter.left == null){
                     if (iter.right.left == null) {
                         rotateLeft(iter);
                     } else {
                         rotateRightAndLeft(iter.right);
                     }
-                } else {
-                    if (iter.left.right == null) {
+                } else {  // left and right are exist
+                    if (iter.left.left == entry.parent) {
                         rotateRight(iter);
-                    } else {
+                    } else if (iter.left.right == entry.parent) {
                         rotateLeftAndRight(iter.left);
+                    } else if (iter.right.right == entry.parent) {
+                        rotateLeft(iter);
+                    } else {
+                        rotateRightAndLeft(iter.right);
                     }
                 }
             }
@@ -144,21 +154,21 @@ public class AVLTree<K, V> {
     }
 
     public void display() {
-        List<String> lines = new ArrayList<>();
-        display(root, "", "   ", "root-->", lines);
+        List<String> lines = new LinkedList<>();
+        display(root, "", "   ", "ROOT: ", lines);
         for(String line : lines)
             System.out.println(line.toString());
     }
 
-    private void display(Entry<K, V> e, String spacer, String branch, String hand, java.util.List<String> lines) {
-        if (e == null)
+    private void display(Entry<K, V> entry, String spacer, String branch, String hand, List<String> lines) {
+        if (entry == null)
             return;
-        lines.add(spacer + hand + e.value.toString());
-        spacer += branch + "    ";
-        if(e.left != null)
-            display(e.left, spacer, "|", "+L-->", lines);
-        if(e.right != null)
-            display(e.right, spacer, " ", "+R-->", lines);
+        lines.add(spacer + hand + entry.value.toString());
+        spacer += branch + " ";
+        if(entry.left != null)
+            display(entry.left, spacer, "|", "LEFT: ", lines);
+        if(entry.right != null)
+            display(entry.right, spacer, " ", "RIGHT: ", lines);
     }
 
     @Override
@@ -178,11 +188,45 @@ public class AVLTree<K, V> {
     }
 
     public static void main(String[] args) {
-        AVLTree<String, String> tree = new AVLTree<>((a, b) -> a.compareTo(b));
-        tree.insert("x", "x");
-        tree.insert("z", "z");
-        tree.insert("y", "y");
+        AVLTree<Integer, Integer> tree = new AVLTree<>((a, b) -> Integer.compare(a, b));
+        tree.insert(40, 40);
+        tree.insert(20, 20);
+        tree.insert(10, 10);
+        tree.insert(25, 25);
+        tree.insert(30, 30);
+        tree.insert(22, 22);
+        tree.insert(50, 50);
         tree.display();
         System.out.println(tree);
+        // Entry<Integer, Integer> a = new Entry<>(40, 40);
+        // Entry<Integer, Integer> b = new Entry<>(20, 20);
+        // Entry<Integer, Integer> c = new Entry<>(10, 10);
+        // Entry<Integer, Integer> d = new Entry<>(25, 25);
+        // Entry<Integer, Integer> e = new Entry<>(30, 30);
+        // Entry<Integer, Integer> f = new Entry<>(22, 22);
+        // b.left = c;
+        // c.parent = b;
+        // b.right = e;
+        // e.parent = b;
+        // e.left = d;
+        // d.parent = e;
+        // d.left = f;
+        // f.parent = d;
+        // e.right = a;
+        // a.parent = e;
+        // tree.rotateRightAndLeft(e);
+
+        // List<Entry<Integer, Integer>> entries = new LinkedList<>();
+        // entries.add(a);
+        // entries.add(b);
+        // entries.add(c);
+        // entries.add(d);
+        // entries.add(e);
+        // entries.add(f);
+
+        // List<String> lines = new LinkedList<>();
+        // tree.display(d, "", "   ", "ROOT: ", lines);
+        // for(String line : lines)
+        //     System.out.println(line.toString());
     }
 }
