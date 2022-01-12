@@ -34,60 +34,60 @@ public class BinarySearchTree<K, V> {
         size = 0;
     }
 
-    public void put(K key, V value) {
-        root = put(root, key, value);
+    public void insert(K key, V value) {
+        if (root == null) {
+            root = new Entry<>(key, value);
+            size = 1;
+            return;
+        }
+
+        Entry<K, V> iter = root;
+        Entry<K, V> parent = null;
+        while (iter != null) {
+            parent = iter;
+            if (comparator.compare(key, iter.key) < 0) {
+                iter = iter.left;
+            } else {
+                iter = iter.right;
+            }
+        }
+        Entry<K, V> entry = new Entry<>(key, value);
+        if (comparator.compare(key, parent.key) < 0) {
+            parent.left = entry;
+        } else {
+            parent.right = entry;
+        }
         size++;
     }
 
-    private Entry<K, V> put(Entry<K, V> entry, K key, V value) {
-        if (entry == null) {
-            entry = new Entry<>(key, value);
-        } else if (comparator.compare(key, entry.key) < 0) {
-            entry.left = put(entry.left, key, value);
-        } else {
-            entry.right = put(entry.right, key, value);
-        }
-        return entry;
-    }
-
     public V get(K key) {
-        return get(root, key).value;
+        Entry<K, V> iter = root;
+        while (iter != null) {
+            int cpr = comparator.compare(key, iter.key);
+            if (cpr == 0) {
+                return iter.value;
+            }
+            iter = cpr < 0 ? iter.left : iter.right;
+        }
+        return null;
     }
 
-    private Entry<K, V> get(Entry<K, V> entry, K key) {
-        if (entry == null) {
-            throw new NoSuchElementException();
+    public V remove(K key) {
+        Entry<K, V> iter = root;
+        Entry<K, V> parent = null;
+        while (iter != null) {
+            int cpr = comparator.compare(key, iter.key);
+            parent = iter;
+            if (cpr == 0) {
+                V value = iter.value; 
+                iter = deleteEntry(parent);
+                size--;
+                return value;
+            }
+            iter = cpr < 0 ? iter.left : iter.right;
         }
-        int cmp = comparator.compare(key, entry.key);
-        if (cmp == 0) {
-            return entry;
-        } else if (cmp < 0) {
-            return get(entry.left, key);
-        } else {
-            return get(entry.right, key);
-        }
+        return null;
     }
-
-    public void remove(K key) {
-        root = remove(root, key);
-        size--;
-    }
-
-    private Entry<K, V> remove(Entry<K, V> entry, K key) {
-        if (entry == null) {
-            throw new NoSuchElementException();
-        }
-        int cmp = comparator.compare(key, entry.key);
-        if (cmp == 0) {
-            entry = deleteEntry(entry);
-        } else if (cmp < 0) {
-            entry.left = remove(entry.left, key);
-        } else {
-            entry.right = remove(entry.right, key);
-        }
-        return entry;
-    }
-
     private Entry<K, V> deleteEntry(Entry<K, V> entry) {
         if (entry.left == null) {
             if (entry.right == null) {

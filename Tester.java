@@ -1,5 +1,6 @@
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.NoSuchElementException;
@@ -107,7 +108,7 @@ public class Tester{
         BinarySearchTree<Integer, Integer> bst = new BinarySearchTree<>((a, b) -> Integer.compare(a, b));
         Integer[] input = {5, 1, 3, 9, 7, 2};
         for (Integer i : input) {
-            bst.put(i, i);
+            bst.insert(i, i);
         }
         assertEquals("[ {1:1} {2:2} {3:3} {5:5} {7:7} {9:9} ]", bst.toString());
         assertEquals(input.length, bst.size());
@@ -115,14 +116,10 @@ public class Tester{
             assertEquals(i, bst.get(i));
         }
 
-        try {
-            bst.remove(4);
-        } catch (Exception e) {
-            assertEquals(new NoSuchElementException().getClass(), e.getClass());
-        }
+        assertNull(bst.remove(4));
 
         for (Integer i : input) {
-            bst.remove(i);
+            assertEquals(i, bst.remove(i));
         }
         assertEquals(0, bst.size());
     }
