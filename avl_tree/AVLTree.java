@@ -113,7 +113,6 @@ public class AVLTree<K, V> {
 
     public V remove(K key) {
         Entry<K, V> entry = getEntry(key);
-        System.out.println(entry);
         if (entry == null) {
             return null;
         }
@@ -124,67 +123,57 @@ public class AVLTree<K, V> {
 
     private void deleteEntry(Entry<K, V> entry) {
         Entry<K, V> parent = entry.parent;
-        if (parent != null) {
-            if (entry.left == null) {
-                if (entry.right == null) {
-                    if (parent.left == entry) {
-                        parent.left = null;
-                    } else {
-                        parent.right = null;
-                    }
-                } else {
-                    Entry<K, V> right = entry.right;
-                    right.parent = parent;
-                    if (parent.left == entry) {
-                        parent.left = right;
-                    } else {
-                        parent.right = right;
-                    }
-                }
+        if (entry.left == null && entry.right == null) {
+            if (parent == null) {
+                root = null;
             } else {
-                Entry<K, V> left = entry.left;
-                if (entry.right == null) {
-                    left.parent = parent;
-                    if (parent.left == entry) {
-                        parent.left = left;
-                    } else {
-                        parent.right = left;
-                    }
+                if (parent.left == entry) {
+                    parent.left = null;
                 } else {
-                    Entry<K, V> right = entry.right;
-                    Entry<K, V> new_right = maxEntry(left);
-                    new_right.right = right;
-                    right.parent = new_right;
-                    left.parent = parent;
-                    if (parent.left == entry) {
-                        parent.left = left;
-                    } else {
-                        parent.right = left;
-                    }
-                    adjustBalance(left);
+                    parent.right = null;
+                }
+            }
+        } else if (entry.left == null) {
+            Entry<K, V> right = entry.right;
+            if (parent == null) {
+                root = right;
+            } else {
+                right.parent = parent;
+                if (parent.left == entry) {
+                    parent.left = right;
+                } else {
+                    parent.right = right;
+                }
+            }
+        } else if (entry.right == null) {
+            Entry<K, V> left = entry.left;
+            if (parent == null) {
+                root = left;
+            } else {
+                left.parent = parent;
+                if (parent.left == entry) {
+                    parent.left = left;
+                } else {
+                    parent.right = left;
                 }
             }
         } else {
-            if (entry.left == null) {
-                if (entry.right == null) {
-                    root = null;
-                } else {
-                    root = entry.right;
-                }
+            Entry<K, V> left = entry.left;
+            Entry<K, V> right = entry.right;
+            Entry<K, V> new_right = maxEntry(left);
+            new_right.right = right;
+            right.parent = new_right;
+            left.parent = parent;
+            if (parent == null) {
+                root = left;
             } else {
-                Entry<K, V> left = entry.left;
-                if (entry.right == null) {
-                    root = left;
+                if (parent.left == entry) {
+                    parent.left = left;
                 } else {
-                    Entry<K, V> right = entry.right;
-                    Entry<K, V> new_right = maxEntry(left);
-                    new_right.right = right;
-                    right.parent = new_right;
-                    root = left;
-                    left.parent = null;
-                    adjustBalance(left);
+                    parent.right = left;
                 }
             }
+            adjustBalance(left);
         }
         entry = null;
         size--;
