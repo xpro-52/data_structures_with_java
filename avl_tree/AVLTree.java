@@ -1,8 +1,6 @@
 package avl_tree;
 
 import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.List;
 
 public class AVLTree<K, V> {
     static class Entry<K, V> {
