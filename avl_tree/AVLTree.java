@@ -21,7 +21,7 @@ public class AVLTree<K, V> {
 
         @Override
         public String toString() {
-            return "{" + this.key + ":" + this.value + "}";
+            return this.key + ": " + this.value;
         }
     }
 
@@ -135,10 +135,10 @@ public class AVLTree<K, V> {
             }
         } else if (entry.left == null) {
             Entry<K, V> right = entry.right;
+            right.parent = parent;
             if (parent == null) {
                 root = right;
             } else {
-                right.parent = parent;
                 if (parent.left == entry) {
                     parent.left = right;
                 } else {
@@ -147,10 +147,10 @@ public class AVLTree<K, V> {
             }
         } else if (entry.right == null) {
             Entry<K, V> left = entry.left;
+            left.parent = parent;
             if (parent == null) {
                 root = left;
             } else {
-                left.parent = parent;
                 if (parent.left == entry) {
                     parent.left = left;
                 } else {
@@ -243,22 +243,29 @@ public class AVLTree<K, V> {
         rotateRight(z);
     }
 
-    public void display() {
+    public int size() {
+        return size;
+    }
+
+    public void __structure() {  // debug
         StringBuilder sb = new StringBuilder();
-        display(root, "", "   ", "ROOT: ", sb);
+        __structure(root, "", "   ", "ROOT: ", sb);
         System.out.println("height: " + height(root));
         System.out.println(sb);
     }
 
-    private void display(Entry<K, V> entry, String spacer, String branch, String hand, StringBuilder sb) {
-        if (entry == null)
+    private void __structure(Entry<K, V> entry, String spacer, String branch, String hand, StringBuilder sb) {
+        if (entry == null) {
             return;
-        sb.append(spacer).append(hand).append(entry).append("\n");
+        }
+        sb.append(spacer).append(hand).append(entry.value.toString()).append(", parent: " + entry.parent).append("\n");
         spacer += branch + " ";
-        if(entry.left != null)
-            display(entry.left, spacer, "|", "LEFT: ", sb);
-        if(entry.right != null)
-            display(entry.right, spacer, " ", "RIGHT: ", sb);
+        if(entry.left != null) {
+            __structure(entry.left, spacer, "|", "LEFT: ", sb);
+        }
+        if(entry.right != null) {
+            __structure(entry.right, spacer, " ", "RIGHT: ", sb);
+        }
     }
 
     @Override
@@ -274,33 +281,5 @@ public class AVLTree<K, V> {
             sj.add(entry.toString());
             toString(entry.right, sj);
         }
-    }
-
-    public static void main(String[] args) {
-        AVLTree<Integer, Integer> tree = new AVLTree<>((a, b) -> Integer.compare(a, b));
-        // tree.insert(40, 40);
-        // tree.insert(20, 20);
-        // tree.insert(10, 10);
-        // tree.insert(25, 25);
-        // tree.insert(30, 30);
-        // tree.insert(22, 22);
-        // tree.insert(50, 50);
-        Integer[] input = {40, 30, 50, 20, 35, 22};
-        for (Integer i : input) {
-            tree.insert(i, i);
-        }
-        tree.display();
-        // for (Integer i : input) {
-        //     System.out.println("delete: " + tree.remove(i));
-        //     tree.display();
-        // }
-        tree.remove(30);
-        tree.display();
-        tree.remove(40);
-        tree.display();
-        tree.remove(50);
-        tree.display();
-        tree.remove(35);
-        tree.display();
     }
 }

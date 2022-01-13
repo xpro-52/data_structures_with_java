@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import avl_tree.AVLTree;
 import binary_search_tree.BinarySearchTree;
 import dynamic_array.DynamicArray;
 import linked_list.LinkedList;
@@ -121,5 +122,23 @@ public class Tester{
         }
         assertEquals(0, bst.size());
         assertEquals("{}", bst.toString());;
+    }
+
+    @Test
+    public void testAVLTree() {
+        AVLTree<Integer, Integer> avlTree = new AVLTree<>((a, b) -> Integer.compare(a, b));
+        Integer[][] inputs = {
+            {40, 20, 10, 25, 30, 22, 50},
+            {14, 17, 11, 7, 53, 4, 14, 12, 8, 60, 19, 16, 20},
+        };
+        for (Integer i: inputs[0]) {
+            avlTree.insert(i, i);
+        }
+        assertEquals("{10: 10, 20: 20, 22: 22, 25: 25, 30: 30, 40: 40, 50: 50}", avlTree.toString());
+        for (Integer i: inputs[0]) {
+            assertEquals(i, avlTree.remove(i));
+        }
+        assertEquals("{}", avlTree.toString());
+        assertEquals(0, avlTree.size());
     }
 }
